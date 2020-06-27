@@ -1,0 +1,226 @@
+<div class="mybody">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#" (click)="goHome();">PLM Portal</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+       
+        <li class="nav-item">
+          <a class="nav-link" href="#">IT Support </a>
+        </li>
+     
+      </ul>
+     
+    </div>
+  </nav>
+  
+
+  
+<div style="margin-top: 250px;"  *ngIf="simpleSearchPG">
+<div class="container-fluid ">
+    <div class="row">
+      <div class="col-3">
+        
+      </div>
+      <div class="col-6">
+        <div class=" jumbotron-fluid ">
+            <div class="container-fluid m-4">
+              <h1 class="display-4">How Can I Help You <span style="color: #28a7a2bd;">?</span></h1>
+             
+            </div>
+            <div class="container-fluid">
+               
+                <input class="form-control col-12"  autofocus type="search"   placeholder="Search" aria-label="Search" (keyup)="filter_recommend('first')" (keydown.enter)="searchit()" [(ngModel)]="searchtext">
+                
+                <br>
+                <ul class="list-group" id="myList">
+                  &nbsp;Recommendation
+                  <li class="list-group-item box m-2 btn-outline-dark" *ngFor="let item of recommend_filter" (click)="setComplete(item)">{{item}}</li>
+                  <li class="list-group-item box m-2 btn-outline-info" >Create New QA +++</li>
+                </ul>  
+                
+            </div>
+          </div>
+      </div>
+      <div class="col-3">
+     
+      </div>
+
+    </div>
+</div>
+</div>
+
+
+<div class="container-fluid " *ngIf="searchresultPG">
+    <div class="row mt-5">
+          <div class="col-2">
+            <h1 class="display-5">Category </h1>
+            <hr>
+              <!--<ul class="img-list">
+  
+                <li *ngFor="let catitem of CategoryList"class="notification "  (click)="selectCategory(catitem)" ><img class="imgCategory" src="/assets/img/{{catitem}}.png"><span class="badge">3</span></li>
+            
+               
+              </ul>-->
+
+              <ul class="list-group">
+                <li *ngFor="let catitem of CategoryList" (click)="selectCategory(catitem)" class="list-group-item d-flex justify-content-between align-items-center ml-2 zoom">
+                  {{catitem}}
+                  <span class="badge badge-info badge-pill" style="background-color: #5588a3 !important;">14</span>
+                </li>
+                
+              </ul>
+              
+            </div>
+            <span style="width: 40px !important;"></span>
+            <div class="col-9 ">
+                <div class="container-fluid">
+                    <h3 class="display-5">Results : </h3>
+                    <input class="form-control col-12"  autofocus type="search"   placeholder="Search" aria-label="Search" (keyup)="filter_recommend('first')" (click)="filter_recommend('second')"(keydown.enter)="searchit()" [(ngModel)]="searchtext">
+                    <br>Domain : 
+                    <button *ngIf="this.SelectedCategoryList.length==0" type="button" class="btn btn-outline-info ml-2 mb-1" > All</button>
+                    
+                    <button *ngFor="let catitem of SelectedCategoryList" type="button" class="btn btn-outline-info ml-2" (click)=removeSelectedCategory(catitem)>  
+                 
+                      <span class=" text-left">{{catitem}}</span>
+                      <span class=" text-right ml-2" >X</span>
+                    </button>
+                    <hr *ngIf="untilItype">
+                    <ul class="list-group" id="myList" *ngIf="untilItype">
+                    
+                      &nbsp;Recommendation
+                      <li class="list-group-item btn-outline-dark" *ngFor="let item of recommend_filter" (click)="setComplete(item)">{{item}}</li>
+                      
+                    </ul>  
+                    <hr>
+                    <!-- result page https://codepen.io/alvaromontoro/pen/ebPEWb-->
+                    
+
+                      <div class="mycard mb-1" *ngFor="let QA of QAList">
+                       
+                        <div class="mygeneral">
+                          <h3><a href="#" style="color: #5588a3;" (click)="goDetails(QA)"> {{QA.title}} </a> 
+                            
+                            <button *ngIf="QA.conf < 0.5" type="button" class="btn btn-outline-primary float float-right" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="QuickAnswer(QA)">Poor Guess</button>
+                            <button *ngIf="QA.conf > 0.5" type="button" class="btn btn-outline-primary float float-right" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="QuickAnswer(QA)">Quick Answer</button>
+                          </h3>
+                          <div class="wrapperforResult">
+                            <div class="dividerforResult div-transparent div-transparent"></div>
+                           
+                            <!--<div class="divider div-transparent div-tab-down"></div>
+                         <div class="divider div-transparent div-arrow-down"></div>
+                            <div class="divider div-transparent div-stopper"></div>
+                            <div class="divider div-transparent div-dot"></div>-->
+                        
+                          </div>
+                          <p>{{QA.answer}}</p>
+                        </div>
+                      </div>
+
+
+ <!-- result page-->
+
+                    
+                </div>
+            </div>
+                
+        </div>
+   
+</div>
+
+
+
+
+
+<div class="container-fluid " *ngIf="contextPG">
+  <div class="row mt-5">
+        <div class="col-3">
+          <button class="mybutton" (click)="goBackResult()" >
+            <span class="myspan" ><span style="font-size:20px;">&#8592;</span> 	&nbsp;	&nbsp;Back</span>
+          </button>
+        </div>
+        <div class="col-6">
+          <h1 style="color: #5588a3;" class="display-4">{{titleInDetail}}</h1>
+          <div class="wrapper">
+            <div class="divider div-transparent div-arrow-down"></div>
+            <!--<div class="divider div-transparent div-tab-down"></div>
+            <div class="divider div-transparent div-transparent"></div>
+            <div class="divider div-transparent div-stopper"></div>
+            <div class="divider div-transparent div-dot"></div>-->
+        
+          </div>
+          <div id="contextdiv">
+            {{contextInDetail}}
+          </div>
+        </div>
+        <div class="col-2" style="margin-left: 90px;">
+         <!--
+          <h1 class="display-4" style="color: #5588a3;" >Comments </h1>
+          <div class="wrapper">
+            <div class="divider div-transparent div-dot"></div>
+            <div class="divider div-transparent div-tab-down"></div>
+            <div class="divider div-transparent div-transparent"></div>
+            <div class="divider div-transparent div-stopper"></div>
+            <div class="divider div-transparent div-dot"></div>
+        
+          </div>
+          <form class="mb-1">
+            <div class="form-group">
+              <label for="comment1" style="color: #5588a3;" >Your Comment</label>
+              <textarea class="form-control" id="comment1" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-outline-info">Submit</button>
+          </form>
+          <div class="card mb-1 p-3" style="width: 350px !important;" *ngFor="let comment of CommentList">
+
+              <h4><a style="color: #5588a3;"> {{comment}} </a></h4>
+              <div class="wrapperforResult">
+                <div class="dividerforResult div-transparent div-transparent"></div>
+               
+                <div class="divider div-transparent div-tab-down"></div>
+             <div class="divider div-transparent div-arrow-down"></div>
+                <div class="divider div-transparent div-stopper"></div>
+                <div class="divider div-transparent div-dot"></div>
+           
+              <div *ngIf="!(comment==whoIam)">Lorem ipsum dolor sit amet, consectetur adipiscing elittetur adipiscing elittetur adipiscing elit. Fusce a volutpat mauris, at molestie lacus. Nam vestibulum sodales odio ut pulvinar.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a volutpat mauris, at molestie lacus. Nam vestibulum sodales odio ut pulvinar.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a volutpat mauris, at molestie lacus. Nam vestibulum sodales odio ut pulvinar.  </div>
+              <textarea class="form-control" style="height: 180px;" *ngIf="comment==whoIam" [(ngModel)]="commenttest"></textarea>
+             
+              <button *ngIf="comment==whoIam" type="button" class="btn btn-outline-danger mt-2">Delete</button>
+          
+              <button *ngIf="comment==whoIam" type="button" class="btn btn-outline-info float-right mt-2">Save</button>
+            </div>
+          </div>
+        -->
+        </div>
+  </div>
+</div>
+<div class="lines">
+    <div class="line"></div>
+    <div class="line invisible"></div>
+    <div class="line" *ngIf="!searchresultPG"></div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    
+    <div class="modal-content">
+      <div class="myclass"  *ngIf="quickAnswer==''"> 
+        <div class="myclass2">
+          <div class="loader"></div>
+        </div>
+        </div>
+      <h2 *ngIf="quickAnswer==''"><b>{{titleInDetail}}</b></h2>
+      <hr>
+      <div [innerHTML]="quickAnswer"></div>
+        <hr>
+    </div>
+  </div>
+</div>
